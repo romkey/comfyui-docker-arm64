@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.6.4 (January 16, 2026)
+
+- Updated the Dockerfile to use a multi-arch Python base image and CPU-only PyTorch so the image builds on arm64.
+- Replaced `libgl1-mesa-glx` with `libgl1` for compatibility with Debian slim on arm64.
+- Upgraded `pip` during the build process and adjusted the entrypoint to use the system `python` binary.
+- Added a GitHub Actions workflow to publish arm64 images with tags that match the Git tag and `latest`, and disabled provenance to avoid the `application/vnd.oci.empty.v1+json` pull error.
+
 ## v0.6.3 (January 9, 2026)
 
 - This is another emergency release to fix an issue in v0.6.2 where the ComfyUI Docker image failed to build, because the build arguments for the versions of ComfyUI and ComfyUI Manager were defined before the `FROM` instruction in the Dockerfile. This only caused an issue now, because the "v" prefix in the ComfyUI version (e.g., "v0.8.2") was removed and then interpolated directly into the `git checkout` command, which led Git to fail with an error stating that the path spec "v" does not exist. The build arguments for the ComfyUI and ComfyUI Manager versions have now been moved to be defined after the `FROM` instruction in the Dockerfile.
