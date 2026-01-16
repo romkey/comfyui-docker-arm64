@@ -1,11 +1,13 @@
 
-# Defines build arguments for the versions of PyTorch, CUDA, and cuDNN to use
-ARG PYTORCH_VERSION=2.9.1
-ARG CUDA_VERSION=12.8
-ARG CUDNN_VERSION=9
+# Defines build arguments for the versions of Python and PyTorch to use
+ARG PYTHON_VERSION=3.11
+ARG PYTORCH_VERSION=2.2.2
 
-# This image is based on the latest official PyTorch image, because it already contains CUDA, CuDNN, and PyTorch
-FROM pytorch/pytorch:${PYTORCH_VERSION}-cuda${CUDA_VERSION}-cudnn${CUDNN_VERSION}-runtime
+# Use a multi-arch Python base that works on arm64 (CPU-only)
+FROM python:${PYTHON_VERSION}-slim
+
+# Re-declare build args after FROM so they are available for RUN steps
+ARG PYTORCH_VERSION
 
 # Defines build arguments for the versions of ComfyUI and ComfyUI Manager to use
 ARG COMFYUI_VERSION=0.8.2
@@ -16,7 +18,8 @@ RUN apt-get update --assume-yes && \
     apt-get install --assume-yes \
         git \
         sudo \
-        libgl1-mesa-glx \
+        ca-certificates \
+        libgl1 \
         libglib2.0-0 && \
     rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
@@ -35,10 +38,12 @@ RUN git clone https://github.com/Comfy-Org/ComfyUI-Manager.git /opt/comfyui-mana
     cd /opt/comfyui-manager && \
     git checkout ${COMFYUI_MANAGER_VERSION}
 
-# Installs the required Python packages for both ComfyUI and the ComfyUI Manager
-RUN pip install \
-    --requirement /opt/comfyui/requirements.txt \
-    --requirement /opt/comfyui-manager/requirements.txt
+# Installs PyTorch (CPU) and the required Python packages for ComfyUI and the ComfyUI Manager
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir "torch==${PYTORCH_VERSION}" && \
+    pip install --no-cache-dir \
+        --requirement /opt/comfyui/requirements.txt \
+        --requirement /opt/comfyui-manager/requirements.txt
 
 # Sets the working directory to the ComfyUI directory
 WORKDIR /opt/comfyui
