@@ -1,12 +1,13 @@
 # Changelog
 
-## v0.6.5 (January 16, 2026)
+## v0.6.6 (January 16, 2026)
 
 - Switched to a CUDA-enabled arm64 base image and removed the CPU-only PyTorch install.
 - Added a startup guard that fails fast when CUDA is unavailable unless explicitly allowed.
 - Replaced `libgl1-mesa-glx` with `libgl1` for Debian slim compatibility.
 - Upgraded `pip` during build and ensured the entrypoint uses the system `python`.
 - Added a GitHub Actions workflow to publish arm64 images with tags that match the Git tag and `latest`, and disabled provenance to avoid the `application/vnd.oci.empty.v1+json` pull error.
+- Replaced the legacy matrix-based publish workflow with a single arm64 build job to avoid empty matrix failures.
 
 ## v0.6.3 (January 9, 2026)
 
