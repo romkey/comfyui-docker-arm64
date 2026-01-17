@@ -36,10 +36,13 @@ RUN git clone https://github.com/Comfy-Org/ComfyUI-Manager.git /opt/comfyui-mana
     git checkout ${COMFYUI_MANAGER_VERSION}
 
 # Installs the required Python packages for ComfyUI and the ComfyUI Manager
+# comfyui-frontend-package is not available on arm64, so filter it out.
 RUN pip install --no-cache-dir --upgrade pip && \
+    grep -v '^comfyui-frontend-package==' /opt/comfyui/requirements.txt > /tmp/requirements.txt && \
     pip install --no-cache-dir \
-        --requirement /opt/comfyui/requirements.txt \
-        --requirement /opt/comfyui-manager/requirements.txt
+        --requirement /tmp/requirements.txt \
+        --requirement /opt/comfyui-manager/requirements.txt && \
+    rm -f /tmp/requirements.txt
 
 # Sets the working directory to the ComfyUI directory
 WORKDIR /opt/comfyui

@@ -64,3 +64,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
           sbom: false
+          cache-from: type=gha,scope=comfyui-arm64
+          cache-to: type=gha,scope=comfyui-arm64,mode=max

@@ -1,11 +1,12 @@
 # Changelog
 
-## v0.6.10 (January 17, 2026)
+## v0.6.11 (January 17, 2026)
 
 - Switched to a CUDA-enabled arm64 base image and removed the CPU-only PyTorch install.
 - Updated the default PyTorch base image to `dustynv/pytorch:2.7-r36.4.0` for Thor/Jetson compatibility.
 - Added a workflow step to free disk space on GitHub Actions runners to avoid out-of-space failures.
 - Enabled GitHub Actions build cache to speed up Docker builds.
+- Filtered `comfyui-frontend-package` from ComfyUI requirements on arm64 to avoid missing wheel errors.
 - Added a startup guard that fails fast when CUDA is unavailable unless explicitly allowed.
 - Replaced `libgl1-mesa-glx` with `libgl1` for Debian slim compatibility.
 - Upgraded `pip` during build and ensured the entrypoint uses the system `python`.
