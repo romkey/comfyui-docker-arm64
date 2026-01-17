@@ -59,6 +59,17 @@ done
 # disabled (--disable-auto-launch), because we do not want (nor is it possible) to open a browser window in a Docker container; to allow users to pass
 # in additional command line arguments ("$@"), for example, --enable-cors-header to enable CORS and allow external web apps to interact with ComfyUI
 # in this container
+if [ "$COMFYUI_ALLOW_CPU" != "1" ];
+then
+    if ! python - <<'PY'
+import torch
+raise SystemExit(0 if torch.cuda.is_available() else 1)
+PY
+    then
+        echo "CUDA is not available. Start the container with GPU support or set COMFYUI_ALLOW_CPU=1." >&2
+        exit 1
+    fi
+fi
 if [ -z "$USER_ID" ] || [ -z "$GROUP_ID" ];
 then
     echo "Running container as $USER..."

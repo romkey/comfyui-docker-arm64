@@ -1,13 +1,9 @@
 
-# Defines build arguments for the versions of Python and PyTorch to use
-ARG PYTHON_VERSION=3.11
-ARG PYTORCH_VERSION=2.2.2
+# Defines the base image to use (Jetson/L4T PyTorch with CUDA)
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.2-py3
 
-# Use a multi-arch Python base that works on arm64 (CPU-only)
-FROM python:${PYTHON_VERSION}-slim
-
-# Re-declare build args after FROM so they are available for RUN steps
-ARG PYTORCH_VERSION
+# Use an arm64 CUDA-enabled base image
+FROM ${BASE_IMAGE}
 
 # Defines build arguments for the versions of ComfyUI and ComfyUI Manager to use
 ARG COMFYUI_VERSION=0.8.2
@@ -38,9 +34,8 @@ RUN git clone https://github.com/Comfy-Org/ComfyUI-Manager.git /opt/comfyui-mana
     cd /opt/comfyui-manager && \
     git checkout ${COMFYUI_MANAGER_VERSION}
 
-# Installs PyTorch (CPU) and the required Python packages for ComfyUI and the ComfyUI Manager
+# Installs the required Python packages for ComfyUI and the ComfyUI Manager
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir "torch==${PYTORCH_VERSION}" && \
     pip install --no-cache-dir \
         --requirement /opt/comfyui/requirements.txt \
         --requirement /opt/comfyui-manager/requirements.txt
