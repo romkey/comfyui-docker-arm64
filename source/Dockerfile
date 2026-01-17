@@ -1,6 +1,6 @@
 
-# Defines the base image to use (Jetson/L4T PyTorch with CUDA)
-ARG BASE_IMAGE=nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.2-py3
+# Defines the base image to use (Jetson/IGPU PyTorch with CUDA)
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:25.05-py3-igpu
 
 # Use an arm64 CUDA-enabled base image
 FROM ${BASE_IMAGE}
