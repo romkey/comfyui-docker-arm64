@@ -1,9 +1,10 @@
 # Changelog
 
-## v0.6.8 (January 16, 2026)
+## v0.6.9 (January 17, 2026)
 
 - Switched to a CUDA-enabled arm64 base image and removed the CPU-only PyTorch install.
 - Updated the default PyTorch base image to `nvcr.io/nvidia/pytorch:25.05-py3` for broader CUDA GPU support.
+- Added a workflow step to free disk space on GitHub Actions runners to avoid out-of-space failures.
 - Added a startup guard that fails fast when CUDA is unavailable unless explicitly allowed.
 - Replaced `libgl1-mesa-glx` with `libgl1` for Debian slim compatibility.
 - Upgraded `pip` during build and ensured the entrypoint uses the system `python`.
