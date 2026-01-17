@@ -1,6 +1,7 @@
 
 # Defines the base image to use (CUDA-enabled PyTorch)
-ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:25.05-py3
+#ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:25.05-py3
+ARG BASE_IMAGE=dustynv/pytorch:2.7-r36.4.0
 
 # Use an arm64 CUDA-enabled base image
 FROM ${BASE_IMAGE}
